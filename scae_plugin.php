@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Scae Custom Plugins
+Plugin Name: Scae Custom Plugins Set
 Plugin URI: www.scae.academy
 Description: This plugin creates custom set of pages for SCAE site.
 Version: 1.0
