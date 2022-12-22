@@ -35,11 +35,9 @@ function simulador_form_page(){
             <div>
                 <label for="sim_complexity">Nivel de Complexidade</label>
                 <select name="sim_complexity" id="sim_complexity">
-                    <option value="1">Fundamental 1</option>
-                    <option value="2">Fundamental 2</option>
-                    <option value="3">Superior</option>
-                    <option value="4">Mestrado</option>
-                    <option value="5">Doutorado</option>
+                    <option value="Fundamental 1">Fundamental 1</option>
+                    <option value="Fundamental 2">Fundamental 2</option>
+                    <option value="Superior">Superior</option>
                 </select>
             </div>
             <div>
@@ -56,11 +54,9 @@ function simulador_shortcode(){
     return ob_get_clean();
 }
 
-add_shortcode('simulador', 'simulador_shortcode');
-
 function save_simulador_to_db(){
     global $wpdb;
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['sim_name']) && isset($_POST['sim_abrev']) && isset($_POST['sim_desc']) && isset($_POST['sim_owner']) && isset($_POST['sim_license']) && isset($_POST['sim_link']) && isset($_POST['sim_complexity'])) {
         $name = sanitize_text_field($_POST['sim_name']);
         $abrev = sanitize_text_field($_POST['sim_abrev']);
         $desc = sanitize_textarea_field($_POST['sim_desc']);
@@ -69,23 +65,35 @@ function save_simulador_to_db(){
         $link = sanitize_text_field($_POST['sim_link']);
         $complexity = sanitize_text_field($_POST['sim_complexity']);
 
-        $table_name = $wpdb->prefix . 'simulador';
-        $wpdb->insert( 
-        $table_name, 
-        array( 
-            'sim_id' => 0,
-            'sim_name' => $name, 
-            'sim_abrev' => $abrev,
-            'sim_desc' => $desc, 
-            'sim_owner' => $owner,
-            'sim_license' => $license,
-            'sim_link' => $link,
-            'sim_complexity' => $complexity
-            ) 
-        );
+        $simulador_name = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}scae_simuladores WHERE sim_name = '$name'");
+        if (!empty($simulador_name)) {
+            echo '<div class="error">Simulador com esse nome já existe!</div>';
+            return;
+        }
+
+        $simulador_abrev = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}scae_simuladores WHERE sim_abrev = '$abrev'");
+        if (!empty($simulador_abrev)) {
+            echo '<div class="error">Simulador com essa abreviação já existe!</div>';
+            return;
+        }
+        else {
+            $table_name = $wpdb->prefix . 'scae_simuladores';
+            $wpdb->insert( 
+            $table_name, 
+            array( 
+                'sim_name' => $name, 
+                'sim_abrev' => $abrev,
+                'sim_desc' => $desc, 
+                'sim_owner' => $owner,
+                'sim_license' => $license,
+                'sim_link' => $link,
+                'sim_complexity' => $complexity
+                ) 
+            );
+            wp_safe_redirect(home_url());
+            exit;
+        }
+       
     }
 }
-
-add_action('init', 'save_simulador_to_db');
-
 ?>

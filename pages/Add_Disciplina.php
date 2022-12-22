@@ -37,28 +37,37 @@ function disciplinas_shortcode(){
     return ob_get_clean();
 }
 
-add_shortcode('disciplina-form', 'disciplinas_shortcode');
+
 
 function save_disciplina_to_db(){
     if(isset($_POST['disc_name']) && isset($_POST['disc_abrev']) && isset($_POST['disc_desc']) && isset($_POST['disc_tier']) && isset($_POST['disc_total_hours'])){
         global $wpdb;
-        $table_name = $wpdb->prefix . 'disciplina';
+        $table_name = $wpdb->prefix . 'scae_disciplinas';
         $name = $_POST['disc_name'];
         $abrev = $_POST['disc_abrev'];
         $desc = $_POST['disc_desc'];
         $tier = $_POST['disc_tier'];
         $hours = $_POST['disc_total_hours'];
-        $wpdb->insert(
-            $table_name,
-            array(
-                'disc_name' => $name, 
-                'disc_abrev' => $abrev, 
+        
+        $disciplina_name = $wpdb->get_results("SELECT * FROM $table_name WHERE disc_name = '$name'");
+        $disciplina_abrev = $wpdb->get_results("SELECT * FROM $table_name WHERE disc_abrev = '$abrev'");
+        if (!empty($disciplina_name)) {
+            echo "Disciplina já existe";
+            return;
+        } 
+        if(!empty($disciplina_abrev)) {
+            echo "Abreviação já existe";
+            return;
+        }else{
+            $wpdb->insert($table_name, array(
+                'disc_name' => $name,
+                'disc_abrev' => $abrev,
                 'disc_desc' => $desc,
                 'disc_tier' => $tier,
                 'disc_total_hours' => $hours
-            ) 
-        );
+            ));
+            wp_safe_redirect(home_url());
+            exit;
+        }
     }
 }
-
-add_action('init', 'save_disciplina_to_db');
