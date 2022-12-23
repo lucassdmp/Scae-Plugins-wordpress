@@ -112,7 +112,6 @@ function create_list_disciplina_page(){
         'post_type' => 'page'
     );
     $page_id = wp_insert_post($args);
-    var_dump($page_id);
 }
 
 function delete_list_disciplina_page(){
@@ -122,5 +121,29 @@ function delete_list_disciplina_page(){
 
 register_activation_hook(__FILE__, 'create_list_disciplina_page');
 register_deactivation_hook(__FILE__, 'delete_list_disciplina_page');
+
+//Create listar aulas page
+require_once (ABSPATH . 'wp-content/plugins/Scae-Plugins-wordpress/pages/Listar_AulaDisciplina.php');
+add_shortcode('aulas_disciplina', 'aulasDisciplina_form');
+
+function create_listarAulasDisciplinas_page(){
+    $args = array(
+        'post_title' => 'Aulas',
+        'post_slug' => 'aulas',
+        'post_content' => '[aulas_disciplina]',
+        'post_status' => 'publish',
+        'post_author' => 1,
+        'post_type' => 'page'
+    );
+    $page_id = wp_insert_post($args);
+}
+
+function delete_listarAulasDisciplinas_page(){
+    $page_id = get_page_by_path('aulas')->ID;
+    wp_delete_post($page_id, true);
+}
+
+register_activation_hook(__FILE__, 'create_listarAulasDisciplinas_page');
+register_deactivation_hook(__FILE__, 'delete_listarAulasDisciplinas_page');
 
 ?>

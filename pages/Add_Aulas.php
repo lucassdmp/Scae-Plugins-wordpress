@@ -1,5 +1,9 @@
 <?php
 function atividades_form_page(){
+    if(!is_user_logged_in()){
+        wp_safe_redirect(home_url());
+        exit;
+    }
     global $wpdb;
     ?>
     <div class="wrap">
@@ -46,6 +50,14 @@ function atividades_form_page(){
                 </select>
             </div>
             <div>
+                <label for="aula_artigo">Artigo:</label>
+                <input type="url" name="aula_artigo" id="aula_artigo">
+            </div>
+            <div>
+                <label for="aula_video">Video:</label>
+                <input type="url" name="aula_video" id="aula_video">
+            </div>
+            <div>
                 <label for="aula_desc">Descrição</label>
                 <textarea name="aula_desc" id="aula_desc" cols="100" rows="10"></textarea>
             </div>
@@ -73,28 +85,52 @@ function save_atividade_to_db(){
         $aula_type = sanitize_text_field($_POST['aula_type']);
         $aula_desc = sanitize_textarea_field($_POST['aula_desc']);
         $aula_horas = intval($_POST['aula_horas']);
+        $aula_video = sanitize_text_field($_POST['aula_video']);
+        $aula_artigo = sanitize_text_field($_POST['aula_artigo']);
 
         $table_name = $wpdb->prefix . 'scae_aulas';
-        $results = $wpdb->insert($table_name, array(
-            'aula_exerc' => $aula_exerc,
-            'aula_horas' => $aula_horas, // 'aula_horas' => '0
-            'aula_type' => $aula_type,
-            'aula_desc' => $aula_desc
-        ));
+        $aulas_result = $wpdb->get_results("SELECT * FROM $table_name WHERE aula_sim_id = $aula_sim_id AND aula_disc_id = $aula_disc_id AND aula_exerc = $aula_exerc");
+        if (!empty($aulas_result)) {
+            echo "Aula já existe";
+        } else {
+            $results = $wpdb->insert($table_name, array(
+                'aula_exerc' => $aula_exerc,
+                'aula_horas' => $aula_horas, // 'aula_horas' => '0
+                'aula_type' => $aula_type,
+                'aula_desc' => $aula_desc
+            ));
+    
+            if ($results){
+                $aula_id = $wpdb->insert_id;
+                $aula_disc_id = intval($aula_disc_id);
 
-        if ($results){
-            $aula_id = $wpdb->insert_id;
+                $aula_sim_id = intval($aula_sim_id);
+                $wpdb->insert($wpdb->prefix . 'scae_aulasdisciplinas', array(
+                    'aula_id' => $aula_id,
+                    'disc_id' => $aula_disc_id
+                ));
+                $wpdb->insert($wpdb->prefix . 'scae_aulasimuladores', array(
+                    'aula_id' => $aula_id,
+                    'sim_id' => $aula_sim_id
+                ));
+                if($aula_video){
+                    $wpdb->insert($wpdb->prefix . 'scae_aulameta', array(
+                        'aula_id' => $aula_id,
+                        'aula_meta_type' => 'video',
+                        'aula_meta_content' => $aula_video
+                    ));
+                }
+                if($aula_artigo){
+                    $wpdb->insert($wpdb->prefix . 'scae_aulameta', array(
+                        'aula_id' => $aula_id,
+                        'aula_meta_type' => 'artigo',
+                        'aula_meta_content' => $aula_artigo
+                    ));
+                }
+            }
+            wp_safe_redirect(home_url());
+            exit;
         }
-        $aula_disc_id = intval($aula_disc_id);
-        $aula_sim_id = intval($aula_sim_id);
-        $wpdb->insert($wpdb->prefix . 'scae_aulasdisciplinas', array(
-            'aula_id' => $aula_id,
-            'disc_id' => $aula_disc_id
-        ));
-        $wpdb->insert($wpdb->prefix . 'scae_aulasimuladores', array(
-            'aula_id' => $aula_id,
-            'sim_id' => $aula_sim_id
-        ));
     }
 }
 

@@ -1,6 +1,9 @@
 <?php
-
 function listar_disciplinas_shortcode($atts) {
+    if(!is_user_logged_in()){
+        wp_safe_redirect(home_url());
+        exit;
+    }
     global $wpdb;
     // Extract the attributes
     extract(shortcode_atts(array(), $atts));
@@ -28,8 +31,8 @@ function listar_disciplinas_shortcode($atts) {
   
     // Display the table
     ?>
-    <table>
-        <thead>
+    <table class="whole_table">
+        <thead class="table_head">
             <tr>
                 <th class="table_header">Nome Do Disciplina</th>
                 <th class="table_header">Abreviação</th>
@@ -37,15 +40,25 @@ function listar_disciplinas_shortcode($atts) {
                 <th class="table_header">Ações</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($disciplinas as $disciplina) : 
+        <tbody class="table_body">
+            <?php 
+                $shortcode_posts = get_posts( array(
+                    'posts_per_page' => -1, // get all posts
+                    'post_type'      => 'page', // only search pages
+                    's'              => '[aulas_disciplina]', // search for the shortcode
+                ));
+                
+                $shortcode_post = $shortcode_posts[0];
+                foreach ($disciplinas as $disciplina) : 
                  ?>
                 <tr>
                     <td class="table_field"><?php echo esc_html($disciplina->disc_name); ?></td>
                     <td class="table_field"><?php echo esc_html($disciplina->disc_abrev); ?></td>
                     <td class="table_field"><?php echo esc_html($disciplina->disc_desc); ?></td>
                     <td class="table_field">
-                        <a href="">Ver Aulas</a>
+                        <a href="<?php
+                            echo home_url() . '/' . $shortcode_post->post_name . '?disciplina=' . $disciplina->disc_id;
+                            ?>">Ver Aulas</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -56,5 +69,9 @@ function listar_disciplinas_shortcode($atts) {
     // Return the output buffer
     return ob_get_clean();
 }
+function enqueue_simple_form(){
+    wp_enqueue_style('simple_form_css', ABSPATH . '/wp-content/plugins/Scae-Plugins-wordpress/css/simple_form.css');
+}
+add_action('wp_enqueue_scripts', 'enqueue_simple_form');
 
 ?>

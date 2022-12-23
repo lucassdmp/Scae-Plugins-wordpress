@@ -1,5 +1,9 @@
 <?php
 function simulador_table_shortcode($atts) {
+    if(!is_user_logged_in()){
+        wp_safe_redirect(home_url());
+        exit;
+    }
     global $wpdb;
     // Extract the attributes
     extract(shortcode_atts(array(), $atts));

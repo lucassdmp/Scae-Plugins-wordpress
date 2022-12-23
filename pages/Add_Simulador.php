@@ -1,5 +1,9 @@
 <?php
 function simulador_form_page(){
+    if(!is_user_logged_in()){
+        wp_safe_redirect(home_url());
+        exit;
+    }
     ?>
     <div class="wrap">
         <form method="post" action="">

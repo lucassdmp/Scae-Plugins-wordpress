@@ -14,7 +14,7 @@ register_activation_hook(__FILE__, 'create_DB');
 
 // TO DO AND CLEAR DOWN THERE
 
-require("includes/plugin.php");
+include("includes/plugin.php");
 
 
 ?>
