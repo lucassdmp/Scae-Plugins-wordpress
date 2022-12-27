@@ -124,7 +124,7 @@ register_deactivation_hook(__FILE__, 'delete_list_disciplina_page');
 
 //Create listar aulas page
 require_once (ABSPATH . 'wp-content/plugins/Scae-Plugins-wordpress/pages/Listar_AulaDisciplina.php');
-add_shortcode('aulas_disciplina', 'aulasDisciplina_form');
+
 
 function create_listarAulasDisciplinas_page(){
     $args = array(
@@ -146,4 +146,7 @@ function delete_listarAulasDisciplinas_page(){
 register_activation_hook(__FILE__, 'create_listarAulasDisciplinas_page');
 register_deactivation_hook(__FILE__, 'delete_listarAulasDisciplinas_page');
 
+
+require_once (ABSPATH . 'wp-content/plugins/Scae-Plugins-wordpress/pages/Listar_AulaSimulador.php');
+require_once (ABSPATH . 'wp-content/plugins/Scae-Plugins-wordpress/pages/Criar_planejamento.php');
 ?>

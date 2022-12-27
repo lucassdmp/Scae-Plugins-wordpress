@@ -1,4 +1,10 @@
 <?php
+
+function enqueue_styles_disc(){
+    wp_enqueue_style('disciplina', plugin_dir_url(__FILE__) . '/css/add_disc.css');
+}
+add_action('wp_enqueue_scripts', 'enqueue_styles_disc');
+
 function disciplina_form_page(){
     if(!is_user_logged_in()){
         wp_safe_redirect(home_url());
@@ -7,27 +13,27 @@ function disciplina_form_page(){
     ?>
     <div class="wrap">
         <form method="post" action="">
-            <div>
+            <div class="disc_name">
                 <label for="disc_name">Nome da Disciplina</label>
                 <input type="text" name="disc_name" id="disc_name" required>
             </div>
-            <div>
+            <div class="disc_abrev">
                 <label for="disc_abrev">Abreviação</label>
                 <input type="text" name="disc_abrev" id="disc_abrev" required>
             </div>
-            <div>
+            <div class="disc_desc">
                 <label for="disc_desc">Descrição</label>
                 <textarea name="disc_desc" id="disc_desc" cols="100" rows="5" required></textarea>
             </div>
-            <div>
+            <div class="disc_tier">
                 <label for="disc_tier">Nivel da Disciplina</label>
                 <input type="text" name="disc_tier" id="disc_tier" required></input>
             </div>
-            <div>
+            <div class="disc_total_hours">
                 <label for="disc_total_hours">Total de Horas</label>
                 <input type="text" name="disc_total_hours" id="disc_total_hours" required></input>
             </div>
-            <div>
+            <div class="disc_submit">
                 <input type="submit" name="submit" id="submit" class="button button-primary" value="Submit">
             </div>
         </form>

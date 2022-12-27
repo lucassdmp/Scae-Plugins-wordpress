@@ -36,6 +36,16 @@ class DB{
         if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
             $this->create_aula_simulador_table();
         }
+
+        $table_name = "wp_scae_planning";
+        if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+            $this->create_planning_table();
+        }
+
+        $table_name = "wp_scae_aulas_planejamento";
+        if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+            $this->create_aulas_planejamento_table();
+        }
     }
 
    
@@ -145,6 +155,34 @@ class DB{
             sim_id int(11) NOT NULL,
             FOREIGN KEY (aula_id) REFERENCES $foreign_key1(aula_id),
             FOREIGN KEY (sim_id) REFERENCES $foreign_key2(sim_id)
+        ) $charset_collate;";
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+
+    private function create_planning_table(){
+        global $wpdb;
+        $table_name = "wp_scae_planning";
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE {$table_name} ( 
+            planning_id INT NOT NULL AUTO_INCREMENT, 
+            user_id INT NOT NULL, 
+            disc_id INT NOT NULL, 
+            PRIMARY KEY (planning_id) 
+        ) $charset_collate;";
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+
+    private function create_aulas_planejamento_table(){
+        global $wpdb;
+        $table_name = "wp_scae_aulas_planejamento";
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE {$table_name} (
+            ap_id bigint(20) NOT NULL AUTO_INCREMENT,
+            planning_id bigint(20) NOT NULL,
+            aula_id bigint(20) NOT NULL,
+            PRIMARY KEY (ap_id)
         ) $charset_collate;";
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
