@@ -1,0 +1,91 @@
+
+
+/*SELECT Planning area*/
+
+form.form_center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 75%;
+  margin: 0 auto;
+}
+
+.select_field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.label_menu {
+  font-size: 1.2em;
+  color: #000000;
+  margin-bottom: 5px;
+}
+
+.select_menu {
+  font-size: 1.2em;
+  padding: 10px;
+  border: 1px solid #09ABEC;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.select_submit {
+  font-size: 1.2em;
+  color: white;
+  background-color: #09ABEC;
+  border-radius: 5px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.select_submit:hover {
+  background-color: #71CFF5;
+}
+
+
+/*
+STYLES FOR FORMS FIELDS IN SITE
+*/
+
+
+
+.search_form {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.searchform_field {
+  font-size: 1.2em;
+  padding: 15px;
+  border: 1px solid #09ABEC;
+  border-radius: 5px 0 0 5px;
+  width: 80%;
+}
+
+.searchform_field:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #09ABEC;
+}
+
+.searchform_bt {
+  font-size: 1.2em;
+  color: white;
+  background-color: #09ABEC;
+  border: none;
+  padding: 16px 20px;
+  cursor: pointer;
+  border-radius: 0 5px 5px 0;
+  width: max-content;
+}
+
+.searchform_bt:hover {
+  background-color: #71CFF5;
+}
+
+
+/*STYLEs FOR PROFILE*/
