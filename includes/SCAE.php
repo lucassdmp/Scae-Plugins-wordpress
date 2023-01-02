@@ -10,6 +10,7 @@ function scae_enqueue_style(){
     wp_enqueue_style('SCAE_styles', SCAE_CSS . 'SCAE_styles.css');
     wp_enqueue_style('SCAE_add_form', SCAE_CSS . 'SCAE_add_form.css');
     wp_enqueue_style('SCAE_table_content', SCAE_CSS . 'SCAE_table_content.css');
+    wp_enqueue_style('SCAE_pdf', SCAE_CSS . 'SCAE_pdf.css');
 }
 add_action('wp_enqueue_scripts', 'scae_enqueue_style');
 ?>

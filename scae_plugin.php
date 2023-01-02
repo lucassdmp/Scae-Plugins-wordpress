@@ -14,10 +14,5 @@ require_once("variables.php");
 
 require_once(SCAE_INCLUDES.'SCAE.php');
 
-function scae_enqueue_table_styles(){
-    wp_enqueue_style('table_styles', plugin_dir_url(__FILE__) . '/pages/css/table.css');
-}
-add_action('wp_enqueue_scripts', 'scae_enqueue_table_styles');
-
 
 ?>
